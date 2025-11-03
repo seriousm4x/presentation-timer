@@ -129,7 +129,7 @@
 <div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
 	<div class="relative h-8 w-full glass">
 		<div
-			class="absolute top-0 left-0 -z-10 h-full bg-white/80 transition-all duration-300"
+			class="absolute top-0 left-0 -z-10 h-full bg-white/80"
 			style:width={`${countingDown ? progress * 100 : 100}%`}
 		></div>
 		<div class="flex h-full w-full items-center justify-center font-bold text-neutral/80">
