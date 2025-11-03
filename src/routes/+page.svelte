@@ -18,6 +18,7 @@
 	let countingDown = $state(true);
 	let timeSelector: HTMLInputElement | undefined = $state();
 	let wakeLock: WakeLockSentinel | null = $state(null);
+	let message = $state('');
 
 	async function start() {
 		if (interval) return;
@@ -73,6 +74,23 @@
 	}
 
 	function handleKeyboard(event: KeyboardEvent) {
+		const target = event.target as HTMLElement | null;
+
+		// if the event came from an input/textarea/contenteditable, do nothing
+		if (target) {
+			const tag = target.tagName;
+			const isTextInput =
+				tag === 'TEXTAREA' ||
+				(tag === 'INPUT' &&
+					(target as HTMLInputElement).type &&
+					['text', 'search', 'email', 'password', 'tel', 'url'].includes(
+						(target as HTMLInputElement).type
+					)) ||
+				(target as HTMLElement).isContentEditable;
+
+			if (isTextInput) return; // <-- bypass the global handler
+		}
+
 		if (event.code === 'Space') {
 			event.preventDefault();
 			if (running) stop();
@@ -125,7 +143,7 @@
 			: 'animate-pulse-bg'}"
 	>
 		<span
-			class="countdown font-mono text-[20vw] font-bold text-white transition-colors duration-500 select-none"
+			class="countdown font-mono text-[20vw] font-bold transition-colors duration-500 select-none"
 		>
 			<span
 				style={`--value:${remainingHours}; --digits: 2;`}
@@ -145,6 +163,13 @@
 				aria-label={remainingSeconds.toString()}>{remainingSeconds}</span
 			>
 		</span>
+		{#if message}
+			<div
+				class="w-full border-4 glass bg-error text-center text-[7vw] leading-tight font-extrabold"
+			>
+				{message}
+			</div>
+		{/if}
 	</div>
 
 	<div
@@ -154,7 +179,7 @@
 			class="flex flex-row flex-wrap justify-center gap-4 blur-xs delay-500 group-hover:blur-none group-hover:delay-0"
 		>
 			<form
-				class="join overflow-hidden rounded-full"
+				class="join"
 				onsubmit={(e) => {
 					e.preventDefault();
 					if (timeSelector) {
@@ -164,38 +189,41 @@
 				}}
 			>
 				<input
-					class="input input-lg join-item h-full rounded-s-full"
+					class="input input-lg join-item rounded-s-full border-0"
 					type="time"
 					step="1"
 					bind:this={timeSelector}
 					value="00:10:00"
 				/>
-				<button class="btn join-item p-6 btn-soft btn-accent" type="submit">Set</button>
+				<button class="btn join-item rounded-e-full btn-soft btn-lg btn-accent" type="submit"
+					>Set</button
+				>
 			</form>
 
-			<div class="join overflow-hidden rounded-full">
+			<div class="join">
 				{#if running}
-					<button class="btn join-item p-6 btn-soft btn-warning" onclick={stop}>
+					<button class="btn join-item rounded-s-full btn-soft btn-lg btn-warning" onclick={stop}>
 						<div class="flex flex-col items-center">
 							<Icon icon="solar:sleeping-square-bold" class="text-xl" />
 							Pause
 						</div>
 					</button>
 				{:else}
-					<button class="btn join-item p-6 btn-soft btn-accent" onclick={start}>
+					<button class="btn join-item rounded-s-full btn-soft btn-lg btn-accent" onclick={start}>
 						<div class="flex flex-col items-center">
 							<Icon icon="solar:square-arrow-right-bold" class="text-xl" />
 							Start
 						</div>
 					</button>
 				{/if}
-				<button class="btn join-item p-6 btn-soft btn-error" onclick={reset}>
+				<button class="btn join-item rounded-e-full btn-soft btn-lg btn-error" onclick={reset}>
 					<div class="flex flex-col items-center">
 						<Icon icon="solar:restart-square-bold" class="text-xl" />
 						Reset
 					</div>
 				</button>
 			</div>
+			<textarea class="textarea w-fit rounded-2xl" bind:value={message}>{message}</textarea>
 		</div>
 
 		<div class="flex flex-row flex-wrap gap-2">
