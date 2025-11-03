@@ -18,4 +18,4 @@ A simple, distraction-free countdown timer for presentations, talks, and meeting
 
 Perfect for presenters who want a clean and reliable timer.
 
-[![](/assets/preview.jpg)](/assets/preview.mp4)
+[![](/assets/preview.jpg)](https://seriousm4x.github.io/presentation-timer/)
