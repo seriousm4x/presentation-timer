@@ -17,10 +17,21 @@
 	let progress = $state(0);
 	let countingDown = $state(true);
 	let timeSelector: HTMLInputElement | undefined = $state();
+	let wakeLock: WakeLockSentinel | null = $state(null);
 
-	function start() {
+	async function start() {
 		if (interval) return;
 		running = true;
+
+		try {
+			wakeLock = await navigator.wakeLock.request('screen');
+			wakeLock.addEventListener('release', () => {
+				wakeLock = null;
+			});
+		} catch (err) {
+			console.log(err);
+		}
+
 		countingDown = remaining > 0;
 
 		interval = setInterval(() => {
@@ -35,8 +46,9 @@
 		}, 1000);
 	}
 
-	function stop() {
+	async function stop() {
 		running = false;
+		await wakeLock?.release();
 		if (interval) {
 			clearInterval(interval);
 			interval = undefined;
