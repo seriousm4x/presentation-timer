@@ -18,4 +18,4 @@ A simple, distraction-free countdown timer for presentations, talks, and meeting
 
 Perfect for presenters who want a clean and reliable timer.
 
-![preview](/assets/preview.mp4)
+![/assets/preview.mp4](/assets/preview.jpg)
