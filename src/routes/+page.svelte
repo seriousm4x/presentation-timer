@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { onMount, setContext } from 'svelte';
+	import { onMount } from 'svelte';
 
+	let endTime: number | undefined;
 	let totalSeconds = $state(0);
-	let remaining = $state(0);
-	setContext('remaining', () => totalSeconds);
 
+	let remaining = $derived(Math.max((endTime! - Date.now()) / 1000, 0));
 	let remainingHours = $derived(new Date(Math.abs(remaining) * 1000).getUTCHours());
 	let remainingMinutes = $derived(new Date(Math.abs(remaining) * 1000).getUTCMinutes());
 	let remainingSeconds = $derived(new Date(Math.abs(remaining) * 1000).getUTCSeconds());
@@ -32,18 +32,21 @@
 			console.log(err);
 		}
 
-		countingDown = remaining > 0;
+		if (!endTime) {
+			countingDown = remaining > 0;
+			endTime = Date.now() + remaining * 1000;
+		} else {
+			endTime = Date.now() + remaining * 1000;
+		}
 
 		interval = setInterval(() => {
 			if (countingDown) {
-				remaining--;
-				if (remaining <= 0) {
-					countingDown = false;
-				}
+				remaining = Math.max((endTime! - Date.now()) / 1000, 0);
+				if (remaining <= 0) countingDown = false;
 			} else {
-				remaining++;
+				remaining = (Date.now() - endTime!) / 1000;
 			}
-		}, 1000);
+		}, 50);
 	}
 
 	async function stop() {
@@ -53,6 +56,7 @@
 			clearInterval(interval);
 			interval = undefined;
 		}
+		endTime = endTime ? Date.now() + remaining * 1000 : undefined;
 	}
 
 	function reset() {
@@ -60,6 +64,7 @@
 		remaining = totalSeconds;
 		color = 'bg-success';
 		countingDown = true;
+		endTime = undefined;
 	}
 
 	function setTime(h: number = 0, m: number = 0, s: number = 0) {
@@ -70,11 +75,8 @@
 	function handleKeyboard(event: KeyboardEvent) {
 		if (event.code === 'Space') {
 			event.preventDefault();
-			if (running) {
-				stop();
-			} else {
-				start();
-			}
+			if (running) stop();
+			else start();
 		} else if (event.code === 'Backspace') {
 			reset();
 		}
@@ -90,10 +92,13 @@
 
 	$effect(() => {
 		progress = totalSeconds ? 1 - remaining / totalSeconds : 0;
-
-		if (countingDown) {
-			color = progress >= 0.8 ? 'bg-error' : progress >= 0.6 ? 'bg-warning' : 'bg-success';
-		}
+		color = countingDown
+			? progress >= 0.8
+				? 'bg-error'
+				: progress >= 0.6
+					? 'bg-warning'
+					: 'bg-success'
+			: color;
 	});
 
 	onMount(() => {
