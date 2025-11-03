@@ -108,8 +108,8 @@
 
 <svelte:window onkeydown={handleKeyboard} onmousemove={hideCursor} />
 
-<div class="relative flex h-svh flex-col items-center justify-between overflow-hidden text-white">
-	<div class="relative h-8 w-full bg-neutral-200/50">
+<div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
+	<div class="relative h-8 w-full glass">
 		<div
 			class="absolute top-0 left-0 -z-10 h-full bg-white/80 transition-all duration-300"
 			style:width={`${countingDown ? progress * 100 : 100}%`}
@@ -148,33 +148,11 @@
 	</div>
 
 	<div
-		class="flex translate-y-20 flex-col items-center justify-end gap-4 rounded-t-2xl bg-neutral-200/60 p-4 opacity-20 transition-all delay-500 duration-300 hover:translate-y-0 hover:opacity-100 hover:shadow-2xl hover:delay-0"
+		class="group flex translate-y-16 flex-col items-center justify-end gap-4 rounded-t-2xl glass p-4 opacity-40 transition-all delay-500 duration-300 hover:translate-y-0 hover:opacity-90 hover:delay-0"
 	>
-		<div class="flex flex-row flex-wrap justify-center gap-4">
-			<div class="join overflow-hidden rounded-full">
-				{#if running}
-					<button class="btn join-item p-6 btn-soft btn-warning" onclick={stop}>
-						<div class="flex flex-col items-center">
-							<Icon icon="solar:sleeping-square-bold" class="text-xl" />
-							Pause
-						</div>
-					</button>
-				{:else}
-					<button class="btn join-item p-6 btn-soft btn-accent" onclick={start}>
-						<div class="flex flex-col items-center">
-							<Icon icon="solar:play-circle-bold" class="text-xl" />
-							Start
-						</div>
-					</button>
-				{/if}
-				<button class="btn join-item p-6 btn-soft btn-error" onclick={reset}>
-					<div class="flex flex-col items-center">
-						<Icon icon="solar:restart-square-bold" class="text-xl" />
-						Reset
-					</div>
-				</button>
-			</div>
-
+		<div
+			class="flex flex-row flex-wrap justify-center gap-4 blur-xs delay-500 group-hover:blur-none group-hover:delay-0"
+		>
 			<form
 				class="join overflow-hidden rounded-full"
 				onsubmit={(e) => {
@@ -194,6 +172,30 @@
 				/>
 				<button class="btn join-item p-6 btn-soft btn-accent" type="submit">Set</button>
 			</form>
+
+			<div class="join overflow-hidden rounded-full">
+				{#if running}
+					<button class="btn join-item p-6 btn-soft btn-warning" onclick={stop}>
+						<div class="flex flex-col items-center">
+							<Icon icon="solar:sleeping-square-bold" class="text-xl" />
+							Pause
+						</div>
+					</button>
+				{:else}
+					<button class="btn join-item p-6 btn-soft btn-accent" onclick={start}>
+						<div class="flex flex-col items-center">
+							<Icon icon="solar:square-arrow-right-bold" class="text-xl" />
+							Start
+						</div>
+					</button>
+				{/if}
+				<button class="btn join-item p-6 btn-soft btn-error" onclick={reset}>
+					<div class="flex flex-col items-center">
+						<Icon icon="solar:restart-square-bold" class="text-xl" />
+						Reset
+					</div>
+				</button>
+			</div>
 		</div>
 
 		<div class="flex flex-row flex-wrap gap-2">
