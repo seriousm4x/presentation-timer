@@ -17,3 +17,6 @@
 		animation: pulse-bg 2s infinite ease-in-out;
 	}
 }
+
+/* https://tailwindcss.com/docs/upgrade-guide#hover-styles-on-mobile */
+@custom-variant hover (&:hover);

@@ -91,9 +91,7 @@
 
 <svelte:window onkeydown={handleKeyboard} onmousemove={hideCursor} />
 
-<div
-	class="relative flex h-screen flex-col items-center justify-between overflow-hidden text-white"
->
+<div class="relative flex h-svh flex-col items-center justify-between overflow-hidden text-white">
 	<div class="relative h-8 w-full bg-neutral-200/50">
 		<div
 			class="absolute top-0 left-0 -z-10 h-full bg-white/80 transition-all duration-300"
