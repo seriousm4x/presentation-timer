@@ -47,7 +47,7 @@
 			} else {
 				remaining = (Date.now() - endTime!) / 1000;
 			}
-		}, 50);
+		}, 10);
 	}
 
 	async function stop() {
@@ -127,7 +127,7 @@
 <svelte:window onkeydown={handleKeyboard} onmousemove={hideCursor} />
 
 <div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
-	<div class="relative h-8 w-full glass">
+	<div class="relative h-8 w-full bg-white/40">
 		<div
 			class="absolute top-0 left-0 -z-10 h-full bg-white/80"
 			style:width={`${countingDown ? progress * 100 : 100}%`}
@@ -173,10 +173,10 @@
 	</div>
 
 	<div
-		class="group flex translate-y-16 flex-col items-center justify-end gap-4 rounded-t-2xl glass p-4 opacity-40 transition-all delay-500 duration-300 hover:translate-y-0 hover:opacity-90 hover:delay-0"
+		class="group flex translate-y-39 flex-col items-center justify-end gap-4 rounded-t-2xl bg-white/40 p-4 opacity-40 shadow-2xl transition-all delay-1000 duration-300 hover:translate-y-0 hover:opacity-90 hover:delay-0"
 	>
 		<div
-			class="flex flex-row flex-wrap justify-center gap-4 blur-xs delay-500 group-hover:blur-none group-hover:delay-0"
+			class="flex flex-row flex-wrap justify-center gap-4 blur-xs delay-1000 group-hover:blur-none group-hover:delay-0"
 		>
 			<form
 				class="join"
@@ -189,41 +189,46 @@
 				}}
 			>
 				<input
-					class="input input-lg join-item rounded-s-full border-0"
+					class="input input-lg join-item h-full rounded-s-full"
 					type="time"
 					step="1"
 					bind:this={timeSelector}
 					value="00:10:00"
 				/>
-				<button class="btn join-item rounded-e-full btn-soft btn-lg btn-accent" type="submit"
+				<button class="btn join-item rounded-e-full p-7 btn-soft btn-lg btn-accent" type="submit"
 					>Set</button
 				>
 			</form>
 
 			<div class="join">
 				{#if running}
-					<button class="btn join-item rounded-s-full btn-soft btn-lg btn-warning" onclick={stop}>
+					<button
+						class="btn join-item rounded-s-full p-7 btn-soft btn-lg btn-warning"
+						onclick={stop}
+					>
 						<div class="flex flex-col items-center">
 							<Icon icon="solar:sleeping-square-bold" class="text-xl" />
 							Pause
 						</div>
 					</button>
 				{:else}
-					<button class="btn join-item rounded-s-full btn-soft btn-lg btn-accent" onclick={start}>
+					<button
+						class="btn join-item rounded-s-full p-7 btn-soft btn-lg btn-accent"
+						onclick={start}
+					>
 						<div class="flex flex-col items-center">
 							<Icon icon="solar:square-arrow-right-bold" class="text-xl" />
 							Start
 						</div>
 					</button>
 				{/if}
-				<button class="btn join-item rounded-e-full btn-soft btn-lg btn-error" onclick={reset}>
+				<button class="btn join-item rounded-e-full p-7 btn-soft btn-lg btn-error" onclick={reset}>
 					<div class="flex flex-col items-center">
 						<Icon icon="solar:restart-square-bold" class="text-xl" />
 						Reset
 					</div>
 				</button>
 			</div>
-			<textarea class="textarea w-fit rounded-2xl" bind:value={message}>{message}</textarea>
 		</div>
 
 		<div class="flex flex-row flex-wrap gap-2">
@@ -258,5 +263,7 @@
 				>2:00 h</button
 			>
 		</div>
+
+		<textarea class="textarea w-full rounded-2xl" bind:value={message}>{message}</textarea>
 	</div>
 </div>
