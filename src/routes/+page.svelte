@@ -126,6 +126,14 @@
 
 <svelte:window onkeydown={handleKeyboard} onmousemove={hideCursor} />
 
+<svelte:head>
+	<title
+		>Timer: {remainingHours.toString().padStart(2, '0')}:{remainingMinutes
+			.toString()
+			.padStart(2, '0')}:{remainingSeconds.toString().padStart(2, '0')}</title
+	>
+</svelte:head>
+
 <div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
 	<div class="relative h-8 w-full bg-white/40">
 		<div
@@ -165,7 +173,7 @@
 		</span>
 		{#if message}
 			<div
-				class="w-full border-4 glass bg-error text-center text-[7vw] leading-tight font-extrabold"
+				class="w-full border-4 glass bg-error text-center text-[7vw] leading-tight font-extrabold whitespace-pre-wrap"
 			>
 				{message}
 			</div>
@@ -232,6 +240,9 @@
 		</div>
 
 		<div class="flex flex-row flex-wrap gap-2">
+			<button class="btn rounded-full btn-dash btn-neutral" onclick={() => setTime(0, 1, 0)}
+				>1 min</button
+			>
 			<button class="btn rounded-full btn-dash btn-neutral" onclick={() => setTime(0, 5, 0)}
 				>5 min</button
 			>
