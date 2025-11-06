@@ -97,6 +97,10 @@
 			else start();
 		} else if (event.code === 'Backspace') {
 			reset();
+		} else if (event.code === 'ArrowUp') {
+			modifyRemaining(10);
+		} else if (event.code === 'ArrowDown') {
+			modifyRemaining(-10);
 		}
 	}
 
@@ -141,9 +145,9 @@
 
 <div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
 	<!-- progress bar -->
-	<div class="relative h-8 w-full bg-white/40">
+	<div class="relative -z-20 h-8 w-full bg-white/40">
 		<div
-			class="absolute top-0 left-0 h-full bg-white/80"
+			class="absolute top-0 left-0 -z-10 h-full bg-white/80"
 			style:width={`${countingDown ? progress * 100 : 100}%`}
 		></div>
 		<div class="flex h-full w-full items-center justify-center font-bold text-neutral/80">
@@ -167,7 +171,7 @@
 
 	<!-- counter -->
 	<div
-		class="absolute -z-20 flex h-full w-full flex-col items-center justify-center transition-colors duration-500 {countingDown
+		class="absolute -z-100 flex h-full w-full flex-col items-center justify-center transition-colors duration-500 {countingDown
 			? color
 			: 'animate-pulse-bg'}"
 	>
