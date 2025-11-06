@@ -6,6 +6,7 @@
 	let totalSeconds = $state(0);
 
 	let remaining = $derived(Math.max((endTime! - Date.now()) / 1000, 0));
+	let remainingDays = $derived(new Date(Math.abs(remaining) * 1000).getUTCDate() - 1);
 	let remainingHours = $derived(new Date(Math.abs(remaining) * 1000).getUTCHours());
 	let remainingMinutes = $derived(new Date(Math.abs(remaining) * 1000).getUTCMinutes());
 	let remainingSeconds = $derived(new Date(Math.abs(remaining) * 1000).getUTCSeconds());
@@ -180,8 +181,18 @@
 			: 'animate-pulse-bg'}"
 	>
 		<span
-			class="countdown font-mono text-[20vw] font-bold transition-colors duration-500 select-none"
+			class="countdown font-mono font-bold transition-colors duration-500 select-none {remainingDays >
+			0
+				? 'text-[calc(100vw/7)]'
+				: 'text-[calc(100vw/5)]'}"
 		>
+			{#if remainingDays > 0}
+				<span
+					style={`--value:${remainingDays};`}
+					aria-live="polite"
+					aria-label={remainingDays.toString()}>{remainingDays}</span
+				>d&nbsp;
+			{/if}
 			<span
 				style={`--value:${remainingHours}; --digits: 2;`}
 				aria-live="polite"
