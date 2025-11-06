@@ -119,6 +119,11 @@
 			: color;
 	});
 
+	function modifyRemaining(seconds: number) {
+		remaining = Math.max(remaining + seconds, 0);
+		endTime = endTime ? Date.now() + remaining * 1000 : undefined;
+	}
+
 	onMount(() => {
 		setTime(0, 10, 0);
 	});
@@ -135,9 +140,10 @@
 </svelte:head>
 
 <div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
+	<!-- progress bar -->
 	<div class="relative h-8 w-full bg-white/40">
 		<div
-			class="absolute top-0 left-0 -z-10 h-full bg-white/80"
+			class="absolute top-0 left-0 h-full bg-white/80"
 			style:width={`${countingDown ? progress * 100 : 100}%`}
 		></div>
 		<div class="flex h-full w-full items-center justify-center font-bold text-neutral/80">
@@ -145,6 +151,21 @@
 		</div>
 	</div>
 
+	<!-- side panels -->
+	<button
+		class="absolute top-1/2 left-0 z-10 flex h-1/2 w-20 -translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl bg-white/40 p-4 font-bold text-accent-content opacity-0 backdrop-blur-3xl transition-all duration-300 hover:opacity-90 hover:shadow-2xl"
+		onclick={() => modifyRemaining(-10)}
+	>
+		-10s
+	</button>
+	<button
+		class="absolute top-1/2 right-0 z-10 flex h-1/2 w-20 -translate-y-1/2 cursor-pointer items-center justify-center rounded-s-2xl bg-white/40 p-4 font-bold text-accent-content opacity-0 backdrop-blur-3xl transition-all duration-300 hover:opacity-90 hover:shadow-2xl"
+		onclick={() => modifyRemaining(10)}
+	>
+		+10s
+	</button>
+
+	<!-- counter -->
 	<div
 		class="absolute -z-20 flex h-full w-full flex-col items-center justify-center transition-colors duration-500 {countingDown
 			? color
@@ -180,6 +201,7 @@
 		{/if}
 	</div>
 
+	<!-- bottom panel -->
 	<div
 		class="group flex translate-y-39 flex-col items-center justify-end gap-4 rounded-t-2xl bg-white/40 p-4 opacity-40 shadow-2xl transition-all delay-1000 duration-300 hover:translate-y-0 hover:opacity-90 hover:delay-0"
 	>
