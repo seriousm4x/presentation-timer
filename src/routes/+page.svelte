@@ -157,13 +157,13 @@
 
 	<!-- side panels -->
 	<button
-		class="absolute top-1/2 left-0 z-10 flex h-1/2 w-20 -translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl bg-white/40 p-4 font-bold text-accent-content opacity-0 backdrop-blur-3xl transition-all duration-300 hover:opacity-90 hover:shadow-2xl"
+		class="absolute top-1/2 left-0 z-10 flex h-1/2 w-20 -translate-y-1/2 cursor-pointer items-center justify-center rounded-e-2xl bg-white/40 p-4 font-bold text-neutral/80 opacity-0 backdrop-blur-3xl transition-all duration-300 hover:opacity-90 hover:shadow-2xl"
 		onclick={() => modifyRemaining(-10)}
 	>
 		-10s
 	</button>
 	<button
-		class="absolute top-1/2 right-0 z-10 flex h-1/2 w-20 -translate-y-1/2 cursor-pointer items-center justify-center rounded-s-2xl bg-white/40 p-4 font-bold text-accent-content opacity-0 backdrop-blur-3xl transition-all duration-300 hover:opacity-90 hover:shadow-2xl"
+		class="absolute top-1/2 right-0 z-10 flex h-1/2 w-20 -translate-y-1/2 cursor-pointer items-center justify-center rounded-s-2xl bg-white/40 p-4 font-bold text-neutral/80 opacity-0 backdrop-blur-3xl transition-all duration-300 hover:opacity-90 hover:shadow-2xl"
 		onclick={() => modifyRemaining(10)}
 	>
 		+10s
