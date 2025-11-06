@@ -125,7 +125,11 @@
 
 	function modifyRemaining(seconds: number) {
 		remaining = Math.max(remaining + seconds, 0);
-		endTime = endTime ? Date.now() + remaining * 1000 : undefined;
+		if (running) {
+			endTime = endTime ? Date.now() + remaining * 1000 : undefined;
+		} else {
+			totalSeconds = Math.max(totalSeconds + seconds, 0);
+		}
 	}
 
 	onMount(() => {
