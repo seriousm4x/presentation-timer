@@ -20,6 +20,9 @@
 	let timeSelector: HTMLInputElement | undefined = $state();
 	let wakeLock: WakeLockSentinel | null = $state(null);
 	let message = $state('');
+	let warnAt = $state(60);
+	let dangerAt = $state(80);
+	let showShortcuts = $state(false);
 
 	async function start() {
 		if (interval) return;
@@ -102,6 +105,12 @@
 			modifyRemaining(10);
 		} else if (event.code === 'ArrowDown') {
 			modifyRemaining(-10);
+		} else if (event.code === 'KeyF') {
+			toggleFullscreen();
+		} else if (event.key === '?') {
+			showShortcuts = !showShortcuts;
+		} else if (event.code === 'Escape') {
+			if (showShortcuts) showShortcuts = false;
 		}
 	}
 
@@ -116,9 +125,9 @@
 	$effect(() => {
 		progress = totalSeconds ? 1 - remaining / totalSeconds : 0;
 		color = countingDown
-			? progress >= 0.8
+			? progress >= dangerAt / 100
 				? 'bg-error'
-				: progress >= 0.6
+				: progress >= warnAt / 100
 					? 'bg-warning'
 					: 'bg-success'
 			: color;
@@ -130,6 +139,14 @@
 			endTime = endTime ? Date.now() + remaining * 1000 : undefined;
 		} else {
 			totalSeconds = Math.max(totalSeconds + seconds, 0);
+		}
+	}
+
+	async function toggleFullscreen() {
+		if (!document.fullscreenElement) {
+			await document.documentElement.requestFullscreen();
+		} else {
+			await document.exitFullscreen();
 		}
 	}
 
@@ -156,7 +173,7 @@
 			style:width={`${countingDown ? progress * 100 : 100}%`}
 		></div>
 		<div class="flex h-full w-full items-center justify-center font-bold text-neutral/80">
-			{Math.round(countingDown ? progress * 100 : 100)} %
+			{Math.floor(countingDown ? progress * 100 : 100)} %
 		</div>
 	</div>
 
@@ -222,7 +239,7 @@
 
 	<!-- bottom panel -->
 	<div
-		class="group flex translate-y-39 flex-col items-center justify-end gap-4 rounded-t-2xl bg-white/40 p-4 opacity-40 shadow-2xl transition-all delay-1000 duration-300 hover:translate-y-0 hover:opacity-90 hover:delay-0"
+		class="group flex translate-y-[calc(100%-5rem)] flex-col items-center justify-end gap-4 rounded-t-2xl bg-white/40 p-4 opacity-20 shadow-2xl transition-all delay-1000 duration-300 hover:translate-y-0 hover:opacity-90 hover:delay-0"
 	>
 		<div
 			class="flex flex-row flex-wrap justify-center gap-4 blur-xs delay-1000 group-hover:blur-none group-hover:delay-0"
@@ -317,5 +334,71 @@
 		</div>
 
 		<textarea class="textarea w-full rounded-2xl" bind:value={message}>{message}</textarea>
+
+		<div class="flex w-full gap-6 text-sm text-neutral/70">
+			<label class="flex w-full flex-col gap-2">
+				<span>Warn at {warnAt}%</span>
+				<input
+					type="range"
+					min="0"
+					max="100"
+					step="1"
+					class="range w-full range-warning range-sm"
+					bind:value={warnAt}
+				/>
+			</label>
+			<label class="flex w-full flex-col gap-2">
+				<span>Danger at {dangerAt}%</span>
+				<input
+					type="range"
+					min="0"
+					max="100"
+					step="1"
+					class="range w-full range-error range-sm"
+					bind:value={dangerAt}
+				/>
+			</label>
+			<button
+				class="btn btn-sm"
+				onclick={() => (showShortcuts = !showShortcuts)}
+				title="Keyboard shortcuts (?)"
+			>
+				?
+			</button>
+		</div>
 	</div>
+
+	{#if showShortcuts}
+		<div
+			class="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
+			onclick={(e) => {
+				if (e.target === e.currentTarget) showShortcuts = false;
+			}}
+			onkeydown={(e) => {
+				if (e.code === 'Escape') showShortcuts = false;
+			}}
+			role="dialog"
+			aria-modal="true"
+			aria-label="Keyboard shortcuts"
+			tabindex="-1"
+		>
+			<div class="card min-w-80 bg-base-100 p-6 shadow-2xl">
+				<h2 class="mb-4 text-xl font-bold">Keyboard Shortcuts</h2>
+				<table class="table">
+					<tbody>
+						<tr><td><kbd class="kbd">Space</kbd></td><td>Start / Pause</td></tr>
+						<tr><td><kbd class="kbd">Backspace</kbd></td><td>Reset</td></tr>
+						<tr><td><kbd class="kbd">↑</kbd></td><td>+10 seconds</td></tr>
+						<tr><td><kbd class="kbd">↓</kbd></td><td>−10 seconds</td></tr>
+						<tr><td><kbd class="kbd">F</kbd></td><td>Toggle fullscreen</td></tr>
+						<tr><td><kbd class="kbd">?</kbd></td><td>Toggle this help</td></tr>
+						<tr><td><kbd class="kbd">Esc</kbd></td><td>Close this help</td></tr>
+					</tbody>
+				</table>
+				<button class="btn mt-4 btn-sm btn-accent" onclick={() => (showShortcuts = false)}
+					>Close</button
+				>
+			</div>
+		</div>
+	{/if}
 </div>
