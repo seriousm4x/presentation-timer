@@ -23,6 +23,7 @@
 	let warnAt = $state(60);
 	let dangerAt = $state(80);
 	let showShortcuts = $state(false);
+	let timerSign = $derived(countingDown ? '' : '+');
 
 	async function start() {
 		if (interval) return;
@@ -159,7 +160,7 @@
 
 <svelte:head>
 	<title
-		>Timer: {remainingHours.toString().padStart(2, '0')}:{remainingMinutes
+		>Timer: {timerSign}{remainingHours.toString().padStart(2, '0')}:{remainingMinutes
 			.toString()
 			.padStart(2, '0')}:{remainingSeconds.toString().padStart(2, '0')}</title
 	>
@@ -199,10 +200,11 @@
 	>
 		<span
 			class="countdown font-mono font-bold transition-colors duration-500 select-none {remainingDays >
-			0
-				? 'text-[calc(100vw/7)]'
+				0 || !countingDown
+				? 'text-[calc(100vw/6)]'
 				: 'text-[calc(100vw/5)]'}"
 		>
+			{timerSign}
 			{#if remainingDays > 0}
 				<span
 					style={`--value:${remainingDays};`}
