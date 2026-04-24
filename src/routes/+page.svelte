@@ -166,7 +166,7 @@
 	>
 </svelte:head>
 
-<div class="relative flex h-svh flex-col items-center justify-between overflow-hidden">
+<div class="relative flex h-dvh flex-col items-center justify-between overflow-hidden">
 	<!-- progress bar -->
 	<div class="relative -z-20 h-8 w-full bg-white/40">
 		<div
