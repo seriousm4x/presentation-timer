@@ -257,13 +257,13 @@
 				}}
 			>
 				<input
-					class="input input-lg join-item h-full rounded-s-full"
+					class="input join-item h-full rounded-s-full input-lg"
 					type="time"
 					step="1"
 					bind:this={timeSelector}
 					value="00:10:00"
 				/>
-				<button class="btn join-item rounded-e-full p-7 btn-soft btn-lg btn-accent" type="submit"
+				<button class="btn join-item rounded-e-full btn-soft p-7 btn-accent btn-lg" type="submit"
 					>Set</button
 				>
 			</form>
@@ -271,7 +271,7 @@
 			<div class="join">
 				{#if running}
 					<button
-						class="btn join-item rounded-s-full p-7 btn-soft btn-lg btn-warning"
+						class="btn join-item rounded-s-full btn-soft p-7 btn-lg btn-warning"
 						onclick={stop}
 					>
 						<div class="flex flex-col items-center">
@@ -281,7 +281,7 @@
 					</button>
 				{:else}
 					<button
-						class="btn join-item rounded-s-full p-7 btn-soft btn-lg btn-accent"
+						class="btn join-item rounded-s-full btn-soft p-7 btn-accent btn-lg"
 						onclick={start}
 					>
 						<div class="flex flex-col items-center">
@@ -290,7 +290,7 @@
 						</div>
 					</button>
 				{/if}
-				<button class="btn join-item rounded-e-full p-7 btn-soft btn-lg btn-error" onclick={reset}>
+				<button class="btn join-item rounded-e-full btn-soft p-7 btn-error btn-lg" onclick={reset}>
 					<div class="flex flex-col items-center">
 						<Icon icon="solar:restart-square-bold" class="text-xl" />
 						Reset
@@ -397,7 +397,7 @@
 						<tr><td><kbd class="kbd">Esc</kbd></td><td>Close this help</td></tr>
 					</tbody>
 				</table>
-				<button class="btn mt-4 btn-sm btn-accent" onclick={() => (showShortcuts = false)}
+				<button class="btn mt-4 btn-accent btn-sm" onclick={() => (showShortcuts = false)}
 					>Close</button
 				>
 			</div>
